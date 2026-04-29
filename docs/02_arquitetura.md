@@ -30,7 +30,7 @@ Relacionamento:
 
 dPlanoConta (1) → (N) ftResultado
 
-📷 ![Modelo](../images/modelo_star_schema.png)
+📷 ![Modelo](../images/modelo_dimensional_star_schema_dre_sql.png)
 
 ## 🔗 Rastreabilidade
 
