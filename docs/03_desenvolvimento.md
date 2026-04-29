@@ -52,11 +52,6 @@ Regras:
 - Criação de N1, N2, N3
 - TipoIndicador
 
-📌 Referência técnica:
-```sql
--- Referência ao tópico 3.3: Hierarquia de contas
-LEN(ID_Conta)
-
 📈 ftResultado
 
 Regras:
@@ -65,10 +60,6 @@ Regras:
 - Conversão de valores
 - Join com dimensão
 - Filtro de contas analíticas
-
-📌 Referência técnica:
--- Referência ao tópico 3.4: Unpivot
-UNPIVOT (...)
 
 ⚙️ Orquestração
 
