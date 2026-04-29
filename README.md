@@ -36,7 +36,7 @@ Mais do que uma evolução técnica, foi a transição de um modelo baseado em a
 - Modelo dimensional (Star Schema)
 - Power BI como camada de consumo
 
-📷 ![Modelo](./images/modelo_star_schema.png)
+📷 ![Modelo](./images/modelo_dimensional_star_schema_dre_sql.png)
 
 ---
 
