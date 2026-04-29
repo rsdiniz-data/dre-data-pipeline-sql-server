@@ -1,4 +1,3 @@
-```sql
 /* =========================================================
    01_CRIAR_TABELAS.sql
    Projeto: DRE Embraer com SQL Server
