@@ -134,7 +134,7 @@ GO
    Índices (Performance)
 
    🔗 Referência:
-   - Documento: 04_entrega_valor.md
+   - Documento: 05_entrega_valor.md
    - Seção: Performance
    ========================================================= */
 
