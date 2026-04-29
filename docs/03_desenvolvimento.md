@@ -56,3 +56,24 @@ Regras:
 ```sql
 -- Referência ao tópico 3.3: Hierarquia de contas
 LEN(ID_Conta)
+
+📈 ftResultado
+
+Regras:
+
+- Unpivot de anos
+- Conversão de valores
+- Join com dimensão
+- Filtro de contas analíticas
+
+📌 Referência técnica:
+-- Referência ao tópico 3.4: Unpivot
+UNPIVOT (...)
+
+⚙️ Orquestração
+
+EXEC dbo.sp_Processar_DRE_Embraer;
+
+📊 Consumo
+
+Power BI conectado diretamente ao SQL Server.
