@@ -26,6 +26,12 @@ Embora funcional, esse modelo apresentava limitações como:
 
 ---
 
+## 🔗 Projeto anterior (Power BI)
+
+👉 [*DRE Automatizada – Análise Financeira*](https://github.com/rsdiniz-data/dre-analise-financeira-powerbi)
+
+---
+
 ## 🚀 Evolução da Solução
 
 Evoluí o projeto para uma arquitetura baseada em SQL Server, com pipeline estruturado:
@@ -51,8 +57,8 @@ Mais do que uma evolução técnica, foi a transição de um modelo baseado em a
 * 📄 [Justificativa](./docs/01_justificativa.md)
 * 🏗️ [Arquitetura](./docs/02_arquitetura.md)
 * ⚙️ [Desenvolvimento](./docs/03_desenvolvimento.md)
-* 💡 [Entrega de Valor](./docs/04_entrega_valor.md)
-* 📊 [Dicionário de Dados](./docs/05_dicionario_dados.md)
+* 💡 [Entrega de Valor](./docs/04_dicionario_dados.md)
+* 📊 [Dicionário de Dados](./docs/05_entrega_valor.md)
 
 ---
 
@@ -109,7 +115,7 @@ Python → Staging → Transformações SQL → Camada Analítica → Power BI
 
 ## 📢 Links
 
-📊 [Acessar dashboard interativo](#)
+📊 [Acessar dashboard interativo]((https://app.powerbi.com/view?r=eyJrIjoiOTcwN2E4OTMtNGUxMS00MDBjLTg3MjMtNzQzOWM0OWE0Y2I0IiwidCI6IjE2YjQyY2M1LTJiZWUtNDRjZS05MWE4LWYyMjgwMGRkZmZmYyJ9)
 📢 [Ler artigo completo](#)
 
 ---
