@@ -52,7 +52,7 @@ Regras:
 - Criação de N1, N2, N3
 - TipoIndicador
 
-📈 ftResultado
+### 📈 ftResultado
 
 Regras:
 
@@ -61,10 +61,10 @@ Regras:
 - Join com dimensão
 - Filtro de contas analíticas
 
-⚙️ Orquestração
+## ⚙️ Orquestração
 
 EXEC dbo.sp_Processar_DRE_Embraer;
 
-📊 Consumo
+## 📊 Consumo
 
 Power BI conectado diretamente ao SQL Server.
