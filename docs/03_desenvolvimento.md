@@ -65,6 +65,19 @@ Regras:
 
 EXEC dbo.sp_Processar_DRE_Embraer;
 
+## 🔍 Validação do Pipeline  
+
+🔗 Script:  
+👉 [02_transformacoes.sql](../scripts/sql/02_transformacoes.sql)  
+
+Inclui:
+
+- Validação das tabelas de staging  
+- Conferência da dimensão dPlanoConta  
+- Conferência da tabela fato ftResultado  
+- Agregações por ano para validação de totais  
+- Identificação de contas sem correspondência  
+
 ## 📊 Consumo
 
 Power BI conectado diretamente ao SQL Server.
