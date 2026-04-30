@@ -1,8 +1,10 @@
 # 📊 DRE Embraer | Arquitetura SQL Server + Power BI
 
-Este projeto tem como objetivo construir uma solução de dados para análise da DRE (Demonstração do Resultado do Exercício) da Embraer, a partir de dados públicos disponibilizados em relatórios financeiros (PDF e Excel).
+## 🧠 Sobre o Projeto 
 
-A DRE é um dos principais relatórios contábeis, permitindo analisar receita, custos, despesas e lucro ao longo do tempo — sendo essencial para tomada de decisão.
+Desenvolvi um projeto para análise da DRE (Demonstração do Resultado do Exercício) da Embraer a partir de dados públicos em PDF e Excel.  
+
+O desafio: transformar dados não estruturados em informação confiável para análise financeira.
 
 ---
 
