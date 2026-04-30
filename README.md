@@ -101,7 +101,7 @@ Python → Staging → Transformações SQL → Camada Analítica → Power BI
 ## 📢 Links
 
 📊 [Acessar dashboard interativo](https://app.powerbi.com/view?r=eyJrIjoiOTcwN2E4OTMtNGUxMS00MDBjLTg3MjMtNzQzOWM0OWE0Y2I0IiwidCI6IjE2YjQyY2M1LTJiZWUtNDRjZS05MWE4LWYyMjgwMGRkZmZmYyJ9)  
-📢 [Ler artigo completo](#)
+📢 [Ler artigo completo](https://www.linkedin.com/pulse/de-arquivos-para-sql-server-evolu%C3%A7%C3%A3o-uma-dre-em-power-ricardo-diniz-lb2vf/)
 
 ---
 
