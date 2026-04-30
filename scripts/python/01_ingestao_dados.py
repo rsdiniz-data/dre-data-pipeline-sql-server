@@ -1,5 +1,5 @@
 # 🔹 Ingestão de Dados
-```sql
+```dax
 # =========================================================
 # 01_INGESTAO_DADOS.py
 # Projeto: DRE Embraer com SQL Server
