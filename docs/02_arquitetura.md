@@ -1,4 +1,4 @@
-# 02. Arquitetura da Solução
+# 2. Arquitetura da Solução
 
 ## 🎯 Objetivo
 
