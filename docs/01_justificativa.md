@@ -1,3 +1,5 @@
+# 01. Justificativa do Projeto
+
 ## 🎯 Problema
 
 Os dados da DRE são disponibilizados em relatórios financeiros (PDF e Excel), sem estrutura pronta para análise.
@@ -20,9 +22,9 @@ Migrar para uma arquitetura baseada em SQL Server, com pipeline estruturado:
 
 ## 🔗 Rastreabilidade
 
-- 📥 Ingestão: `../scripts/python/01_ingestao_dados.py`  
-- 🧱 Estrutura: `../scripts/sql/01_criar_tabelas.sql`  
-- 🔄 Transformações: `../scripts/sql/02_transformacoes.sql`
+- 📥 Ingestão: [Ver Script Python](../scripts/python/01_ingestao_dados.py)  
+- 🧱 Estrutura: [Ver Script SQL](../scripts/sql/01_criar_tabelas.sql)  
+- 🔄 Transformações: [Ver Script SQL](../scripts/sql/02_transformacoes.sql)
 
 ## 🔗 Rastreabilidade
 
