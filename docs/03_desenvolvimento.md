@@ -76,7 +76,8 @@ Inclui:
 - Conferência da dimensão dPlanoConta  
 - Conferência da tabela fato ftResultado  
 - Agregações por ano para validação de totais  
-- Identificação de contas sem correspondência  
+- Identificação de contas sem correspondência
+- Validação da hierarquia
 
 ## 📊 Consumo
 
