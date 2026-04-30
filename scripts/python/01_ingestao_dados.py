@@ -1,5 +1,6 @@
+```markdown
 # 🔹 Ingestão de Dados
-```dax
+```
 # =========================================================
 # 01_INGESTAO_DADOS.py
 # Projeto: DRE Embraer com SQL Server
@@ -386,4 +387,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
