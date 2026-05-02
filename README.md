@@ -60,8 +60,7 @@ Mais do que uma evolução técnica, foi a transição de um modelo baseado em a
 * 🏗️ [Arquitetura](./docs/02_arquitetura.md)
 * ⚙️ [Desenvolvimento](./docs/03_desenvolvimento.md)
 * 📊 [Dicionário de Dados](./docs/04_dicionario_dados.md)
-* 💡 [Entrega de Valor]
-(./docs/05_entrega_valor.md)
+* 💡 [Entrega de Valor](./docs/05_entrega_valor.md)
 
 ---
 
