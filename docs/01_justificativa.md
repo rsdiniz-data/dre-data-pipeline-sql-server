@@ -22,6 +22,7 @@ Migrar para uma arquitetura baseada em SQL Server, com pipeline estruturado:
 
 ## 🔗 Rastreabilidade
 
+- 🪵 Camada Bronze (Ingestão via SharePoint via conector gerenciado): [Ver documentação](../docs/03_desenvolvimento.md)
 - 📥 Ingestão: [Ver Script Python](../scripts/python/01_ingestao_dados.py)  
 - 🧱 Estrutura: [Ver Script SQL](../scripts/sql/01_criar_tabelas.sql)  
 - 🔄 Transformações: [Ver Script SQL](../scripts/sql/02_transformacoes.sql)
