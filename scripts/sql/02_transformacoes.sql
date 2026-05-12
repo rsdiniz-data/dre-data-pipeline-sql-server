@@ -19,8 +19,12 @@
    - orquestração do pipeline analítico
 
    🔗 Rastreabilidade:
-   - Documento: ../docs/03_desenvolvimento.md
-   - Seção: Transformações SQL
+   - Documento técnico: ../docs/03_desenvolvimento.md
+   - Artigo: ../docs/06_artigo_tecnico.md
+     3.4 Transformações de Dados no SQL Server
+     3.4.1 Transformações – dPlanoConta (SQL)
+     3.4.2 Transformações – ftResultado (SQL)
+     3.5 Orquestração do Processo
    ========================================================= */
 
 USE DRE_EMBRAER;
