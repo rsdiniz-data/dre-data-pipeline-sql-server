@@ -1,4 +1,4 @@
-# 06. Artigo Técnico – DRE Embraer com SQL Server
+# 6. Artigo Técnico – DRE Embraer com SQL Server
 
 Este artigo apresenta a evolução de uma solução de análise financeira da DRE da Embraer, migrando de um modelo baseado em arquivos no Power BI para uma arquitetura estruturada em SQL Server.
 
