@@ -64,6 +64,15 @@ Mais do que uma evolução técnica, foi a transição de um modelo baseado em a
 
 ---
 
+## 📄 Artigo Técnico
+
+Este projeto também possui um artigo técnico detalhando a evolução da solução, incluindo arquitetura, pipeline de dados, modelagem dimensional e decisões técnicas adotadas durante o desenvolvimento.
+
+📘 [Acessar artigo completo no LinkedIn](https://www.linkedin.com/pulse/de-arquivos-para-sql-server-evolu%25C3%25A7%25C3%25A3o-uma-dre-em-power-ricardo-diniz-lb2vf/)  
+📄 [Versão resumida no repositório](./docs/06_artigo_tecnico.md)
+
+---
+
 ## 📊 Arquitetura
 
 * SQL Server como camada central
