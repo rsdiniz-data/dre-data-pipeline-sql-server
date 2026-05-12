@@ -2,17 +2,23 @@
 # 🔹 INGESTÃO DE DADOS
 # =========================================================
 
+# =========================================================
 # 01_INGESTAO_DADOS.py
-# Projeto: DRE Embraer com SQL Server
+# Projeto: DRE Embraer | SQL Server
 #
 # Objetivo:
-# 1. Extrair dados da DRE a partir de PDFs (página 16)
-# 2. Ler o Plano de Contas (Excel)
-# 3. Carregar dados em tabelas de staging no SQL Server
+# - Extrair dados da DRE a partir de PDFs
+# - Ler o Plano de Contas (Excel)
+# - Carregar dados em tabelas de staging
 #
 # 🔗 Rastreabilidade:
-# - Documento: ../docs/03_desenvolvimento.md
-# - Seção: Ingestão de Dados com Python
+# - Documento técnico: ../docs/03_desenvolvimento.md
+# - Artigo: ../docs/06_artigo_tecnico.md
+#   3.2 Ingestão de Dados com Python
+#   3.2.1 Pipeline de ingestão
+#
+# Pipeline:
+# PDF / Excel → Staging SQL Server
 #
 # Tabelas de destino:
 # - dbo.stg_Basepdf
@@ -28,15 +34,23 @@ import pdfplumber
 from sqlalchemy import create_engine, text
 
 # =========================================================
-# CONFIGURAÇÕES
+# 1. Configurações do processo
 # =========================================================
+# Referência:
+# - docs/03_desenvolvimento.md → Parametrização
+# - 3.2 → Ingestão de Dados com Python
 
-# Referência: Parametrização do pipeline (evitar hardcoding em produção)
 CAMINHO_PASTA = r"D:\DRE Embraer"
 CAMINHO_BASES = os.path.join(CAMINHO_PASTA, "Bases")
 ARQUIVO_PLANO = os.path.join(CAMINHO_BASES, "PlanoContas.xlsx")
 
-# Referência: Camada de persistência (SQL Server)
+# =========================================================
+# 2. Configuração SQL Server
+# =========================================================
+# Referência:
+# - docs/02_arquitetura.md → Camada Staging
+# - docs/05_entrega_valor.md → Centralização dos dados
+
 SQL_SERVER = "localhost"
 DATABASE = "DRE_EMBRAER"
 DRIVER = "ODBC Driver 17 for SQL Server"
@@ -50,24 +64,28 @@ CONN_STR = (
 engine = create_engine(CONN_STR, fast_executemany=True)
 
 # =========================================================
-# FUNÇÕES AUXILIARES
+# 3. Funções auxiliares
 # =========================================================
 
 def log(msg):
     """
-    Referência: Observabilidade do pipeline
+    Referência:
+    - docs/05_entrega_valor.md → Observabilidade do processo
     """
     print(f"[INFO] {msg}")
 
 
 def limpar_texto(valor):
     """
-    Referência: Padronização de dados (qualidade)
+    Referência:
+    - 3.2.1.3 → Estruturação dos dados
+    - Padronização de qualidade
 
-    Remove:
-    - espaços extras
-    - quebras de linha
+    Objetivo:
+    - remover espaços extras
+    - remover quebras de linha
     """
+
     if pd.isna(valor):
         return None
 
@@ -80,12 +98,13 @@ def limpar_texto(valor):
 
 def validar_ambiente():
     """
-    Referência: Validação pré-execução (boas práticas de pipeline)
+    Referência:
+    - 3.5 → Orquestração do Processo
 
-    Garante:
-    - existência das pastas
-    - existência dos arquivos
+    Objetivo:
+    Garantir pré-requisitos do pipeline
     """
+
     print("=" * 80)
     print("VALIDANDO AMBIENTE")
     print(f"Python: {sys.executable}")
@@ -94,78 +113,106 @@ def validar_ambiente():
         raise Exception(f"Pasta Bases não encontrada: {CAMINHO_BASES}")
 
     if not os.path.isfile(ARQUIVO_PLANO):
-        raise Exception(f"Arquivo PlanoContas.xlsx não encontrado: {ARQUIVO_PLANO}")
+        raise Exception(
+            f"Arquivo PlanoContas.xlsx não encontrado: {ARQUIVO_PLANO}"
+        )
 
     print("Ambiente OK")
     print("=" * 80)
 
-
 # =========================================================
-# EXTRAÇÃO PDF (pdfplumber)
+# 4. Extração PDF (pdfplumber)
 # =========================================================
 
 def extrair_texto_pdf(pdf_path, pagina=16):
     """
-    Referência: 3.2.1.1 → Extração de dados não estruturados (PDF)
+    Referência:
+    - 3.2.1.1 → Leitura dos arquivos PDF
 
     Objetivo de negócio:
     Transformar relatório financeiro em dado estruturado
     """
+
     with pdfplumber.open(pdf_path) as pdf:
+
         indice_pagina = pagina - 1
 
         if indice_pagina >= len(pdf.pages):
             raise Exception(
-                f"O PDF {os.path.basename(pdf_path)} não possui a página {pagina}."
+                f"O PDF {os.path.basename(pdf_path)} "
+                f"não possui a página {pagina}."
             )
 
         page = pdf.pages[indice_pagina]
+
         return page.extract_text()
 
 
 def linha_valida_dre(linha):
     """
-    Referência: 3.2.1.2 → Identificação de linhas válidas
+    Referência:
+    - 3.2.1.2 → Identificação das linhas válidas da DRE
 
     Regras:
-    - Código contábil válido
-    - Presença de valores numéricos
+    - código contábil válido
+    - presença de valores numéricos
 
     Objetivo:
-    Remover ruído do PDF
+    Remover ruídos do PDF
     """
+
     if not linha:
         return False
 
     linha = limpar_texto(linha)
+
     if not linha:
         return False
 
-    tem_codigo = re.match(r"^\d+(?:\.\d+)+\s+", linha) is not None
-    numeros = re.findall(r"\(?-?\d[\d\.,]*\)?", linha)
+    tem_codigo = re.match(
+        r"^\d+(?:\.\d+)+\s+",
+        linha
+    ) is not None
+
+    numeros = re.findall(
+        r"\(?-?\d[\d\.,]*\)?",
+        linha
+    )
 
     return tem_codigo and len(numeros) >= 2
 
 
 def parsear_linha(linha):
     """
-    Referência: 3.2.1.3 → Estruturação dos dados
+    Referência:
+    - 3.2.1.3 → Extração de campos estruturados
 
     Extrai:
-    - Código da conta
-    - Descrição
-    - Valores financeiros
+    - código da conta
+    - descrição
+    - valores financeiros
     """
+
     linha = limpar_texto(linha)
 
-    match = re.match(r"^(\d+(?:\.\d+)+)\s+(.*)", linha)
+    match = re.match(
+        r"^(\d+(?:\.\d+)+)\s+(.*)",
+        linha
+    )
+
     if not match:
         return None
 
     codigo = match.group(1)
     resto = match.group(2)
 
-    numeros = list(re.finditer(r"\(?-?\d[\d\.,]*\)?", resto))
+    numeros = list(
+        re.finditer(
+            r"\(?-?\d[\d\.,]*\)?",
+            resto
+        )
+    )
+
     if len(numeros) < 2:
         return None
 
@@ -173,6 +220,7 @@ def parsear_linha(linha):
     valor_2 = numeros[-1].group()
 
     descricao = resto[:numeros[-2].start()].strip(" -")
+
     if not descricao:
         return None
 
@@ -186,27 +234,36 @@ def parsear_linha(linha):
 
 def extrair_pdf(pdf_path):
     """
-    Referência: 3.2.1 → Pipeline de ingestão
+    Referência:
+    - 3.2.1 → Pipeline de ingestão
 
     Fluxo:
-    PDF → Texto → Linhas válidas → Estrutura tabular → DataFrame
+    PDF → Texto → Linhas válidas → Estrutura tabular
 
     Objetivo:
     Preparar dados para staging
     """
+
     log(f"Processando {pdf_path}")
 
-    texto = extrair_texto_pdf(pdf_path, pagina=16)
+    texto = extrair_texto_pdf(
+        pdf_path,
+        pagina=16
+    )
 
     if not texto:
         return None
 
     linhas = texto.split("\n")
+
     registros = []
 
     for linha in linhas:
+
         if linha_valida_dre(linha):
+
             reg = parsear_linha(linha)
+
             if reg:
                 registros.append(reg)
 
@@ -217,23 +274,39 @@ def extrair_pdf(pdf_path):
 
     nome_arquivo = os.path.basename(pdf_path)
 
-    # Referência: 3.2.1.4 → Identificação do ano
+    # =====================================================
+    # 4.1 Identificação do ano
+    # =====================================================
+    # Referência:
+    # - 3.2.1.4 → Identificação do ano pelo nome do arquivo
+
     df["Valor_2022"] = None
     df["Valor_2021"] = None
     df["Valor_2024"] = None
     df["Valor_2023"] = None
 
     if "2022" in nome_arquivo:
+
         df["Valor_2022"] = df["Valor_1"]
         df["Valor_2021"] = df["Valor_2"]
+
     elif "2024" in nome_arquivo:
+
         df["Valor_2024"] = df["Valor_1"]
         df["Valor_2023"] = df["Valor_2"]
 
-    # Referência: rastreabilidade de origem
+    # =====================================================
+    # 4.2 Rastreabilidade de origem
+    # =====================================================
+    # Referência:
+    # - docs/05_entrega_valor.md → Governança
+
     df["ArquivoOrigem"] = nome_arquivo
 
-    df = df.drop(columns=["Valor_1", "Valor_2"], errors="ignore")
+    df = df.drop(
+        columns=["Valor_1", "Valor_2"],
+        errors="ignore"
+    )
 
     return df[
         [
@@ -247,30 +320,43 @@ def extrair_pdf(pdf_path):
         ]
     ]
 
-
 # =========================================================
-# LEITURA DO PLANO DE CONTAS
+# 5. Leitura do Plano de Contas
 # =========================================================
 
 def ler_plano_conta():
     """
-    Referência: 3.2.1.5 → Leitura do Excel
+    Referência:
+    - 3.2.1.5 → Leitura do Excel (PlanoContas.xlsx)
 
     Objetivo:
     Importar estrutura contábil oficial
     """
+
     log("Lendo PlanoContas.xlsx")
 
-    xls = pd.ExcelFile(ARQUIVO_PLANO, engine="openpyxl")
+    xls = pd.ExcelFile(
+        ARQUIVO_PLANO,
+        engine="openpyxl"
+    )
 
     if "PlanoContas" not in xls.sheet_names:
+
         raise Exception(
-            f"A aba 'PlanoContas' não foi encontrada."
+            "A aba 'PlanoContas' não foi encontrada."
         )
 
-    df = pd.read_excel(xls, sheet_name="PlanoContas")
+    df = pd.read_excel(
+        xls,
+        sheet_name="PlanoContas"
+    )
 
-    # Referência: Padronização de colunas
+    # =====================================================
+    # 5.1 Padronização das colunas
+    # =====================================================
+    # Referência:
+    # - 3.2.1.5 → Estrutura do Plano de Contas
+
     df = df.rename(columns={
         "ID Conta": "ID_Conta",
         "Lançamento": "Lancamento",
@@ -278,37 +364,61 @@ def ler_plano_conta():
         "Calculado": "Calculado"
     })
 
-    df = df[["ID_Conta", "Lancamento", "Descricao", "Calculado"]].copy()
+    df = df[
+        [
+            "ID_Conta",
+            "Lancamento",
+            "Descricao",
+            "Calculado"
+        ]
+    ].copy()
 
-    # Referência: Preservação da hierarquia (ordem do Excel)
-    df.insert(0, "RowNum", range(1, len(df) + 1))
+    # =====================================================
+    # 5.2 Preservação da hierarquia
+    # =====================================================
+    # Referência:
+    # - 3.4.1.3 → FillDown da hierarquia
+
+    df.insert(
+        0,
+        "RowNum",
+        range(1, len(df) + 1)
+    )
 
     df["ID_Conta"] = df["ID_Conta"].apply(limpar_texto)
     df["Descricao"] = df["Descricao"].apply(limpar_texto)
 
     return df
 
-
 # =========================================================
-# CARGA SQL
+# 6. Carga SQL Server
 # =========================================================
 
 def carregar_sql(basepdf, plano):
     """
-    Referência: 3.2.1.7 → Carga no SQL Server
+    Referência:
+    - 3.2.1.6 → Criação da camada de staging
+    - 3.2.1.7 → Carga no SQL Server
 
     Estratégia:
-    - TRUNCATE (reprocessamento completo)
-    - INSERT (carga controlada)
+    - TRUNCATE
+    - INSERT
 
     Objetivo:
-    Garantir consistência da staging
+    Garantir reprocessamento controlado
     """
+
     log("Carregando staging no SQL Server")
 
     with engine.begin() as conn:
-        conn.execute(text("TRUNCATE TABLE dbo.stg_Basepdf"))
-        conn.execute(text("TRUNCATE TABLE dbo.stg_PlanoConta"))
+
+        conn.execute(
+            text("TRUNCATE TABLE dbo.stg_Basepdf")
+        )
+
+        conn.execute(
+            text("TRUNCATE TABLE dbo.stg_PlanoConta")
+        )
 
     basepdf.to_sql(
         "stg_Basepdf",
@@ -328,19 +438,21 @@ def carregar_sql(basepdf, plano):
 
     log("Carga finalizada com sucesso")
 
-
 # =========================================================
-# MAIN (ORQUESTRAÇÃO)
+# 7. Main (Orquestração)
 # =========================================================
 
 def main():
     """
-    Referência: 3.5 → Orquestração do pipeline
+    Referência:
+    - 3.5 → Orquestração do Processo
 
     Fluxo:
     Validação → Extração → Transformação → Carga
     """
+
     try:
+
         validar_ambiente()
 
         arquivos_pdf = [
@@ -355,17 +467,27 @@ def main():
         lista_basepdf = []
 
         for pdf in arquivos_pdf:
+
             df_pdf = extrair_pdf(pdf)
 
             if df_pdf is not None and not df_pdf.empty:
+
                 lista_basepdf.append(df_pdf)
+
             else:
-                log(f"Nenhum dado válido em {os.path.basename(pdf)}")
+
+                log(
+                    f"Nenhum dado válido em "
+                    f"{os.path.basename(pdf)}"
+                )
 
         if not lista_basepdf:
             raise Exception("Nenhum PDF gerou dados.")
 
-        basepdf = pd.concat(lista_basepdf, ignore_index=True)
+        basepdf = pd.concat(
+            lista_basepdf,
+            ignore_index=True
+        )
 
         print("\nPrévia stg_Basepdf:")
         print(basepdf.head())
@@ -380,10 +502,11 @@ def main():
         print("\nPROCESSO FINALIZADO COM SUCESSO")
 
     except Exception as e:
+
         print("\nERRO:")
         print(str(e))
-        traceback.print_exc()
 
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()
